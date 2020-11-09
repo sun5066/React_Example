@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "../css/PhoneList.css";
 
-const PhoneList = ({ phoneBooks, deletePhoneBooks }) => {
+const PhoneList = ({ phoneBooks, deletePhoneBooks, editableBooks }) => {
+    const [name, setName] = useState("");
+    const [number, setNumber] = useState("");
     /**
      * tr tag 를 클릭했을때 사용할 event 핸들러
      * tr tag 를 클릭을 했지만 우리가 사용 할 것은 td tag 가 목적이므로
@@ -14,11 +16,25 @@ const PhoneList = ({ phoneBooks, deletePhoneBooks }) => {
         const name = closest.dataset.name; // data-name 으로 설정된 값 가져오기
         const id = closest.dataset.id; // data-id 로 설정된 값 가져오기
 
-        if (window.confirm(name + "을 정말 삭제합니까?")) {
-            // alert(name + "데이터 삭제");
-            deletePhoneBooks(id);
-            return false;
+        if (className === "delete") {
+            if (window.confirm(name + "을 정말 삭제합니까?")) {
+                // alert(name + "데이터 삭제");
+                deletePhoneBooks(id);
+                return false;
+            }
         }
+
+        // delete 컬럼이 아닌 부분을 클릭하면
+        // edit 모드로 전환시키기
+        editableBooks(id);
+    };
+
+    const onNameChange = (e) => {
+        setName(e.target.value);
+    };
+
+    const onNumberChange = (e) => {
+        setNumber(e.target.value);
     };
 
     /**
@@ -31,19 +47,42 @@ const PhoneList = ({ phoneBooks, deletePhoneBooks }) => {
      * 문제가 발생할 수 있다.
      */
     const phoneList = phoneBooks.map((phone, index) => {
-        return (
-            <tr
-                key={phone.id}
-                onClick={trOnClick}
-                data-id={phone.id}
-                data-name={phone.name}
-            >
-                <td>{index + 1}</td>
-                <td>{phone.name}</td>
-                <td>{phone.number}</td>
-                <td className="delete">&times;</td>
-            </tr>
-        );
+        if (phone.isEdit) {
+            setName(phone.name);
+            setNumber(phone.number);
+
+            return (
+                <tr
+                    key={phone.id}
+                    onClick={trOnClick}
+                    data-id={phone.id}
+                    data-name={phone.name}
+                >
+                    <td>{index + 1}</td>
+                    <td>
+                        <input value={name} onChange={onNameChange} />
+                    </td>
+                    <td>
+                        <input value={number} onChange={onNumberChange} />
+                    </td>
+                    <td className="update-ok">&#10003;</td>
+                </tr>
+            );
+        } else {
+            return (
+                <tr
+                    key={phone.id}
+                    onClick={trOnClick}
+                    data-id={phone.id}
+                    data-name={phone.name}
+                >
+                    <td>{index + 1}</td>
+                    <td>{phone.name}</td>
+                    <td>{phone.number}</td>
+                    <td className="delete">&times;</td>
+                </tr>
+            );
+        }
     });
 
     return (

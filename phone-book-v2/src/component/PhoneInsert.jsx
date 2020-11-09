@@ -7,6 +7,8 @@ const PhoneInsert = ({ insertPhoneBook }) => {
 
     const save = (e) => {
         insertPhoneBook(name, number);
+        setName("");
+        setNumber("");
     };
     const inputName = (e) => {
         setName(e.target.value);

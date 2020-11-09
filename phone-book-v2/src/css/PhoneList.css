@@ -16,3 +16,9 @@ table.phoneList th {
 table.phoneList th {
     background-color: dodgerblue;
 }
+
+table.phoneList input {
+    padding: 10px;
+    outline: none;
+    text-align: center;
+}

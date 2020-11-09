@@ -18,7 +18,7 @@ const PhoneMain = (props) => {
      * ref 형 변수는 current 라는 속성을 자유롭게 변화 시킬 수 있고
      * 값이 변화가 되어도 화면이 rendering 되지 않는다.
      */
-    const nextId = useRef(4);
+    const nextId = useRef(phoneBooks.length);
 
     const insertPhoneBook = (name, number) => {
         /**
@@ -39,6 +39,16 @@ const PhoneMain = (props) => {
     }; // insertPhoneBook
 
     /**
+     * Effect의 두번째 파라메터를 빈값([])으로 설정을 하면
+     * 프로젝트가 시작될때 한번만 이벤트가 작동된다.
+     */
+    useEffect(() => {
+        const localStorageBooks = window.localStorage.getItem("phoneBooks");
+        setPhoneBooks(JSON.parse(localStorageBooks));
+        nextId.current = phoneBooks.length;
+    }, []);
+
+    /**
      * 리액트의 시스템 이벤트
      * phoneBooks 데이터를 감시하고 있다가
      * 변화가 생기면 내부의 코드를 실행하라
@@ -50,15 +60,6 @@ const PhoneMain = (props) => {
         // 2. localStorage에 phoneBooks 라는 이름으로 저장하기
         window.localStorage.setItem("phoneBooks", stringPhoneBook);
     }, [phoneBooks]);
-
-    /**
-     * Effect의 두번째 파라메터를 빈값([])으로 설정을 하면
-     * 프로젝트가 시작될때 한번만 이벤트가 작동된다.
-     */
-    useEffect(() => {
-        const localStorageBooks = window.localStorage.getItem("phoneBooks");
-        setPhoneBooks(JSON.parse(localStorageBooks));
-    });
 
     /**
      * id 값을 기준으로 phoneBooks에서 전화번호를 제거하기
@@ -74,12 +75,24 @@ const PhoneMain = (props) => {
         setPhoneBooks(deleteAfterBooks);
     };
 
+    const editableBooks = (id) => {
+        const editBooks = phoneBooks.map((phone) => {
+            if (phone.id === Number(id)) {
+                return { ...phone, isEdit: true };
+            } else {
+                return { ...phone, isEdit: false };
+            }
+        });
+        setPhoneBooks(editBooks);
+    };
+
     return (
         <div className="phoneMain">
             <h3>나만의 전화번호부</h3>
             <PhoneList
                 phoneBooks={phoneBooks}
                 deletePhoneBooks={deletePhoneBooks}
+                editableBooks={editableBooks}
             />
             <PhoneInsert insertPhoneBook={insertPhoneBook} />
         </div>
