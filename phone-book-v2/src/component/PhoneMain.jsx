@@ -18,7 +18,7 @@ const PhoneMain = (props) => {
      * ref 형 변수는 current 라는 속성을 자유롭게 변화 시킬 수 있고
      * 값이 변화가 되어도 화면이 rendering 되지 않는다.
      */
-    const nextId = useRef(phoneBooks.length);
+    const nextId = useRef(phoneBooks && phoneBooks.length && 0);
 
     const insertPhoneBook = (name, number) => {
         /**
@@ -85,6 +85,18 @@ const PhoneMain = (props) => {
         });
         setPhoneBooks(editBooks);
     };
+    const updateBooks = (id, name, number) => {
+        const updatePhoneBooks = phoneBooks.map((phone) => {
+            if (phone.id === Number(id)) {
+                // 선택된 id와 같은 전화번호는 이름, 번호 등을 업데이트 수행
+                return { ...phone, name: name, number: number, isEdit: false };
+            } else {
+                // 선택된 id와 다른 번호는 isEdit만 false 로 바꾸어서 input 박스가 사라지도록
+                return { ...phone, isEdit: false };
+            }
+        });
+        setPhoneBooks(updatePhoneBooks);
+    };
 
     return (
         <div className="phoneMain">
@@ -93,6 +105,7 @@ const PhoneMain = (props) => {
                 phoneBooks={phoneBooks}
                 deletePhoneBooks={deletePhoneBooks}
                 editableBooks={editableBooks}
+                updateBooks={updateBooks}
             />
             <PhoneInsert insertPhoneBook={insertPhoneBook} />
         </div>

@@ -1,9 +1,30 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import "../css/PhoneList.css";
 
-const PhoneList = ({ phoneBooks, deletePhoneBooks, editableBooks }) => {
-    const [name, setName] = useState("");
-    const [number, setNumber] = useState("");
+const PhoneList = ({
+    phoneBooks,
+    deletePhoneBooks,
+    editableBooks,
+    updateBooks,
+}) => {
+    /**
+     * Hook 함수
+     * use*로 시작되는 함수들(useState, useRef, useEffect, useReducer)
+     *
+     * state 변수가 여러개일 때는 useState 사용 X
+     * useReducer 사용할것
+     *
+     * const [name, setName] = useState("")
+     * state 변수에 name, number를 key 로 만들고
+     * dispatch 는 value 로 만드는것
+     */
+    const reducer = (object, action) => {
+        return { ...object, [action.name]: action.value };
+    };
+
+    const [state, dispatch] = useReducer(reducer, { name: "", number: "" });
+    const { name, number } = state;
+
     /**
      * tr tag 를 클릭했을때 사용할 event 핸들러
      * tr tag 를 클릭을 했지만 우리가 사용 할 것은 td tag 가 목적이므로
@@ -13,15 +34,19 @@ const PhoneList = ({ phoneBooks, deletePhoneBooks, editableBooks }) => {
         console.log(e.target.className);
         const className = e.target.className;
         const closest = e.target.closest("TR");
-        const name = closest.dataset.name; // data-name 으로 설정된 값 가져오기
+        const data_name = closest.dataset.name; // data-name 으로 설정된 값 가져오기
         const id = closest.dataset.id; // data-id 로 설정된 값 가져오기
 
         if (className === "delete") {
-            if (window.confirm(name + "을 정말 삭제합니까?")) {
+            if (window.confirm(data_name + "을 정말 삭제합니까?")) {
                 // alert(name + "데이터 삭제");
                 deletePhoneBooks(id);
                 return false;
             }
+        }
+        if (className === "update-ok") {
+            updateBooks(id, name, number);
+            return false;
         }
 
         // delete 컬럼이 아닌 부분을 클릭하면
@@ -29,12 +54,8 @@ const PhoneList = ({ phoneBooks, deletePhoneBooks, editableBooks }) => {
         editableBooks(id);
     };
 
-    const onNameChange = (e) => {
-        setName(e.target.value);
-    };
-
-    const onNumberChange = (e) => {
-        setNumber(e.target.value);
+    const onChange = (e) => {
+        dispatch(e.target);
     };
 
     /**
@@ -48,8 +69,9 @@ const PhoneList = ({ phoneBooks, deletePhoneBooks, editableBooks }) => {
      */
     const phoneList = phoneBooks.map((phone, index) => {
         if (phone.isEdit) {
-            setName(phone.name);
-            setNumber(phone.number);
+            console.log(phone.name);
+            state.name = phone.name;
+            state.number = phone.number;
 
             return (
                 <tr
@@ -60,10 +82,14 @@ const PhoneList = ({ phoneBooks, deletePhoneBooks, editableBooks }) => {
                 >
                     <td>{index + 1}</td>
                     <td>
-                        <input value={name} onChange={onNameChange} />
+                        <input value={name} name="name" onChange={onChange} />
                     </td>
                     <td>
-                        <input value={number} onChange={onNumberChange} />
+                        <input
+                            value={number}
+                            name="number"
+                            onChange={onChange}
+                        />
                     </td>
                     <td className="update-ok">&#10003;</td>
                 </tr>
