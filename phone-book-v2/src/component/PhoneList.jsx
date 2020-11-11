@@ -17,12 +17,27 @@ const PhoneList = ({
      * const [name, setName] = useState("")
      * state 변수에 name, number를 key 로 만들고
      * dispatch 는 value 로 만드는것
+     *
+     * reducer 함수
+     * useReducer 로 선언된 state 변수들을 통합하여 관리하는 함수이다.
+     * 이 함수는 여러가지 용도로 설정하여 만들수 있다.
+     * 이 함수가 호출될때 어떠한 일을 할지 설정하는 속성이 action.type 이다.
+     * 즉, action.type 값을 임의로 정하여 reducer 함수가 작동되는 방법을 정의할수 있다.
+     * @param {*} object
+     * @param {*} action
      */
     const reducer = (object, action) => {
+        // 만약 action.type이 EDIT_FORM으로 설정되어서 reducer가 호출되면
+        // 실행될 코드
+        if (action.type === "EDIT_FORM") {
+            return { name: action.name, number: action.number };
+        }
+        // input box에 문자열을 입력하는 change 이벤트가 발생할때 default로 실행할 코드
         return { ...object, [action.name]: action.value };
     };
 
     const [state, dispatch] = useReducer(reducer, { name: "", number: "" });
+    console.log(state);
     const { name, number } = state;
 
     /**
@@ -34,19 +49,26 @@ const PhoneList = ({
         console.log(e.target.className);
         const className = e.target.className;
         const closest = e.target.closest("TR");
-        const data_name = closest.dataset.name; // data-name 으로 설정된 값 가져오기
+        const name = closest.childNodes[1].innerText; // closest.dataset.name; // data-name 으로 설정된 값 가져오기
+        const number = closest.childNodes[2].innerText; // closest.dataset.name; // data-name 으로 설정된 값 가져오기
         const id = closest.dataset.id; // data-id 로 설정된 값 가져오기
 
+        console.log(name, id);
+
         if (className === "delete") {
-            if (window.confirm(data_name + "을 정말 삭제합니까?")) {
+            if (window.confirm(name + "을 정말 삭제합니까?")) {
                 // alert(name + "데이터 삭제");
                 deletePhoneBooks(id);
                 return false;
             }
         }
         if (className === "update-ok") {
-            updateBooks(id, name, number);
+            updateBooks(id, state.name, state.number);
             return false;
+        }
+        console.log("go Edit");
+        if (className !== "input") {
+            dispatch({ type: "EDIT_FORM", name: name, number: number });
         }
 
         // delete 컬럼이 아닌 부분을 클릭하면
@@ -70,8 +92,13 @@ const PhoneList = ({
     const phoneList = phoneBooks.map((phone, index) => {
         if (phone.isEdit) {
             console.log(phone.name);
-            state.name = phone.name;
-            state.number = phone.number;
+            // 렌더링이 되는 순간
+            // 키보드로 문자열을 입력할때 화면이 rendering 되면서
+            // 2개의 변수가 서로 초기화를 시도해버린다.
+            // 이름을 변경하고 전화번호를 변경하려고 시도하면
+            // 이름이 다시 phoneBook의 데이터로 초기화가 되어 버린다.
+            // state.name = phone.name;
+            // state.number = phone.number;
 
             return (
                 <tr
@@ -82,12 +109,18 @@ const PhoneList = ({
                 >
                     <td>{index + 1}</td>
                     <td>
-                        <input value={name} name="name" onChange={onChange} />
+                        <input
+                            value={name}
+                            name="name"
+                            className="input"
+                            onChange={onChange}
+                        />
                     </td>
                     <td>
                         <input
                             value={number}
                             name="number"
+                            className="input"
                             onChange={onChange}
                         />
                     </td>
@@ -100,7 +133,7 @@ const PhoneList = ({
                     key={phone.id}
                     onClick={trOnClick}
                     data-id={phone.id}
-                    data-name={phone.name}
+                    // data-name={phone.name}
                 >
                     <td>{index + 1}</td>
                     <td>{phone.name}</td>
