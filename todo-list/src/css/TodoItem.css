@@ -1,0 +1,49 @@
+div.todo-item {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2;
+}
+
+div.todo-item:hover {
+    background-color: rgb(60, 60, 60);
+}
+
+div.delete-item {
+    margin-right: 1rem;
+    color: white;
+    font-weight: 600;
+    opacity: 0;
+}
+
+div.todo-item:hover div.delete-item {
+    opacity: 1;
+}
+
+div.checked {
+    text-decoration: line-through;
+    color: #ccc;
+}
+
+/*
+word-break
+문자열이 영문일 경우 어떻게 줄바꿈을 할래
+한글일 경우는 한 글자 단위로 줄바꿈을 해도 좋다
+
+keep-all
+한글일 경우 단어(공백)단위로 줄바꿈을 하라
+*/
+div.todo-text {
+    flex: 1;
+    word-break: break-all;
+    text-align: left;
+}
+
+div.check-mark {
+    font-size: 1.5rem;
+    line-height: 1rem;
+    margin-left: 1rem;
+    color: dodgerblue;
+    font-weight: 800;
+}
