@@ -53,7 +53,7 @@ class BbsInsert extends Component {
                     onChange={handleOnChange}
                     placeholder={"내용"}
                 />
-                <button onClick={bbsSave}>저장</button>
+                <button onClick={() => bbsSave(this.state)}>저장</button>
             </div>
         );
     }

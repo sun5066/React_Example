@@ -81,16 +81,12 @@ class BbsMain extends Component {
             .catch((err) => console.log(err));
     };
 
-    bbsSave = () => {
+    bbsSave = (bbsData) => {
+        const { isUpdate, b_id, b_writer, b_subject, b_content } = bbsData;
+
         const { insertURL, updateURL } = this.props;
-        const url = this.state.isUpdate ? BBS_UPDATE_URL : BBS_INSERT_URL;
-
-        const b_date_time = this.state.isUpdate
-            ? this.state.b_date_time
-            : Date.toString();
-
-        const { b_id, b_writer, b_subject, b_content } = this.state;
-
+        const url = isUpdate ? BBS_UPDATE_URL : BBS_INSERT_URL;
+        const b_date_time = isUpdate ? bbsData.b_date_time : Date.toString();
         axios
             .post(url, {
                 b_id: b_id,

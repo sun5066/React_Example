@@ -65,7 +65,6 @@ class CarMain extends Component {
     carUpdate = item => {
         const updateCarList = this.state.carList.map(car => {
             if (item.id === car.id) {
-                console.log("새로운코드 : ", item)
                 return {
                     ...item
                 }

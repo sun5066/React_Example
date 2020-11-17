@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import CarItem from "./CarItem";
+import "../css/CarList.css"
 
 class CarList extends Component {
     render() {

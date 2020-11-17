@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import "../css/CarInsert.css";
 
 class CarInsert extends Component {
     state = {
@@ -22,13 +23,9 @@ class CarInsert extends Component {
     }
 
     render() {
-        // if (this.props.carData.isUpdate) {
-        //     this.state = this.props.carData;
-        // }
-
         const {start_date, end_date, present_distance, cost, place, isUpdate} = this.state;
         return (
-            <div className={"form"}>
+            <div className={"input-form"}>
                 <input name={"start_date"} onChange={this.handleChange} value={start_date} placeholder={"시작일시"}/>
                 <input name={"end_date"} onChange={this.handleChange} value={end_date} placeholder={"종료일시"}/>
                 <input name={"present_distance"} onChange={this.handleChange} value={present_distance}
