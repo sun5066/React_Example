@@ -53,7 +53,6 @@ class TodoMain extends Component {
             ...this.state.todoList,
             { id: this.id++, text: todo, isComplete: false },
         ];
-
         this.setState({ todoList: newTodoList });
     };
 

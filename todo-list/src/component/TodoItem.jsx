@@ -6,7 +6,7 @@ class TodoItem extends Component {
         const { todo, onToggle, onDeleteItem } = this.props;
         const ontoggle = (e, id) => {
             if (e.target.className === "delete-item") {
-                if (window.confirm("삭제할까요를레이후?")) {
+                if (window.confirm("삭제할까요?")) {
                     onDeleteItem(id);
                     return false;
                 }

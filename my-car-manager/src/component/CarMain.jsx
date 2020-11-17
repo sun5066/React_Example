@@ -5,24 +5,16 @@ import CarList from "./CarList";
 class CarMain extends Component {
     id = 2;
     state = {
-        carList: [
-            {
-                id: 0,
-                start_date: "2020-11-10",
-                end_date: "2020-11-17",
-                present_distance: "180000",
-                cost: "50000",
-                place: "광주"
-            },
-            {
-                id: 1,
-                start_date: "2020-11-10",
-                end_date: "2020-11-17",
-                present_distance: "180000",
-                cost: "50000",
-                place: "광주"
-            },
-        ]
+        carList: [],
+        carData: {
+            isUpdate: false,
+            id: 0,
+            start_date: "",
+            end_date: "",
+            present_distance: "",
+            cost: "",
+            place: "",
+        },
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -44,7 +36,7 @@ class CarMain extends Component {
         }
     }
 
-    insertList = (item) => {
+    carInsert = (item) => {
         const newList = [
             ...this.state.carList,
             {
@@ -59,14 +51,25 @@ class CarMain extends Component {
         this.setState({carList: newList});
     }
 
+    deleteItem = (id) => {
+        const deleteList = this.state.carList.filter(item => {
+            if (item.id !== Number(id)) return item;
+        })
+        this.setState({carList: deleteList});
+    }
+
+    updateItem = (item) => {
+        this.setState({carData: {...item, isUpdate: true}})
+    }
+
     render() {
         return (
             <div>
                 <div>
-                    <CarInsert insertList={this.insertList}/>
+                    <CarInsert carInsert={this.carInsert} carData={this.state.carData}/>
                 </div>
                 <div>
-                    <CarList carList={this.state.carList}/>
+                    <CarList carList={this.state.carList} deleteItem={this.deleteItem} updateItem={this.updateItem}/>
                 </div>
             </div>
         );

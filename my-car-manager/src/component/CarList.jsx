@@ -3,16 +3,21 @@ import CarItem from "./CarItem";
 
 class CarList extends Component {
     render() {
-        const {carList} = this.props;
-
+        const {carList, deleteItem, updateItem} = this.props;
         const carItems = carList.map((item, index) => {
             return (
-                <CarItem item={item} index={index} />
+                <CarItem key={item.id}
+                         item={item}
+                         index={index}
+                         deleteItem={deleteItem}
+                         updateItem={updateItem}
+                />
             );
         });
 
         return (
             <table>
+                <thead>
                 <tr>
                     <th>No.</th>
                     <th>구분</th>
@@ -23,6 +28,7 @@ class CarList extends Component {
                     <th>장소</th>
                     <th>&hearts;</th>
                 </tr>
+                </thead>
                 {carItems}
             </table>
         );
