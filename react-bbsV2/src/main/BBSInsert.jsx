@@ -1,6 +1,5 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import "../css/BBSInsert.css";
-import axios from "axios";
 
 class BbsInsert extends Component {
     state = {
@@ -11,52 +10,50 @@ class BbsInsert extends Component {
         b_id: 0,
     };
 
+    componentDidUpdate() {
+        if (this.props.bbsData.b_id !== this.state.b_id) {
+            this.setState({ ...this.props.bbsData });
+        }
+        // this.fetchBBsList();
+        // setInterval(callback, time)
+        // 최초에 callback 함수가 실행되고 이후에 time 만큼 경과하면
+        // 또 callback 함수를 계속해서 실행하라
+        // this.timer = setInterval(() => this.fetchBBsList(), 5000);
+    }
+
     handleOnChange = (e) => {
-        this.setState({[e.target.name]: e.target.value});
-    };
-
-    bbsSave = () => {
-        const {insertURL, updateURL} = this.props;
-        const url = this.state.isUpdate ? updateURL : insertURL;
-
-        axios
-            .post(url, {
-                b_id: this.state.b_id,
-                b_writer: this.state.b_writer,
-                b_subject: this.state.b_subject,
-                b_content: this.state.b_content,
-            })
-            .then((result) => console.log(result))
-            .catch((err) => console.log(err));
+        this.setState({ [e.target.name]: e.target.value });
     };
 
     render() {
-        if (this.props.bbsData.isUpdate) {
-            this.state = this.props.bbsData;
-        }
+        // if (this.props.bbsData.isUpdate) {
+        //     this.state = this.props.bbsData;
+        // }
 
-        const {b_writer, b_subject, b_content} = this.state;
+        const { state, handleOnChange } = this;
+        const { b_writer, b_subject, b_content } = state;
+        const { bbsSave } = this.props;
         return (
             <div className={"input-form"}>
                 <input
                     name={"b_writer"}
                     value={b_writer}
-                    onChange={this.handleOnChange}
+                    onChange={handleOnChange}
                     placeholder={"작성자"}
                 />
                 <input
                     name={"b_subject"}
                     value={b_subject}
-                    onChange={this.handleOnChange}
+                    onChange={handleOnChange}
                     placeholder={"제목"}
                 />
                 <input
                     name={"b_content"}
                     value={b_content}
-                    onChange={this.handleOnChange}
+                    onChange={handleOnChange}
                     placeholder={"내용"}
                 />
-                <button onClick={this.bbsSave}>저장</button>
+                <button onClick={bbsSave}>저장</button>
             </div>
         );
     }

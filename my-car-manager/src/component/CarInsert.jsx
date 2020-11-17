@@ -8,27 +8,33 @@ class CarInsert extends Component {
         present_distance: "",
         cost: "",
         place: "",
-        isUpdate: false,
     }
 
-    onChange = (e) => {
+    componentDidUpdate() {
+        if (this.props.carData.id !== this.state.id) {
+            this.setState({ ...this.props.carData });
+        }
+    }
+
+    handleChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
+        console.log(e.target.value)
     }
 
     render() {
-        if (this.props.carData.isUpdate) {
-            this.state = this.props.carData;
-        }
+        // if (this.props.carData.isUpdate) {
+        //     this.state = this.props.carData;
+        // }
 
         const {start_date, end_date, present_distance, cost, place, isUpdate} = this.state;
         return (
             <div className={"form"}>
-                <input name={"start_date"} onChange={this.onChange} value={start_date} placeholder={"시작일시"}/>
-                <input name={"end_date"} onChange={this.onChange} value={end_date} placeholder={"종료일시"}/>
-                <input name={"present_distance"} onChange={this.onChange} value={present_distance}
+                <input name={"start_date"} onChange={this.handleChange} value={start_date} placeholder={"시작일시"}/>
+                <input name={"end_date"} onChange={this.handleChange} value={end_date} placeholder={"종료일시"}/>
+                <input name={"present_distance"} onChange={this.handleChange} value={present_distance}
                        placeholder={"현재거리"}/>
-                <input name={"cost"} onChange={this.onChange} value={cost} placeholder={"소모비용"}/>
-                <input name={"place"} onChange={this.onChange} value={place} onKeyPress={e => {
+                <input name={"cost"} onChange={this.handleChange} value={cost} placeholder={"소모비용"}/>
+                <input name={"place"} onChange={this.handleChange} value={place} onKeyPress={e => {
                     if (e.key === "Enter") {
                         const {carInsert, carUpdate} = this.props;
                         if (isUpdate) {
@@ -37,8 +43,7 @@ class CarInsert extends Component {
                             carInsert(this.state);
                         }
                     }
-                }}
-                       placeholder={"장소"}/>
+                }} placeholder={"장소"}/>
             </div>
         );
     }

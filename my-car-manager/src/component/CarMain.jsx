@@ -65,20 +65,15 @@ class CarMain extends Component {
     carUpdate = item => {
         const updateCarList = this.state.carList.map(car => {
             if (item.id === car.id) {
-                const newItem = [
-                    ...this.state.carList,
-                    {
-                        id: item.id,
-                        start_date: item.start_date,
-                        end_date: item.end_date,
-                        present_distance: item.present_distance,
-                        cost: item.cost,
-                        place: item.place,
-                    }
-                ]
+                console.log("새로운코드 : ", item)
+                return {
+                    ...item
+                }
+            } else {
+                return car;
             }
         })
-        // this.setState({carList: updateCarList});
+        this.setState({carList: updateCarList});
     }
 
     render() {

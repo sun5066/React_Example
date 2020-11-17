@@ -1,8 +1,8 @@
-import BackImg from './z1.jpg';
-import './App.css';
+import BackImg from "./z1.jpg";
+import "./App.css";
 import BbsMain from "./main/BBSMain";
-import {BrowserRouter as Router, Route} from "react-router-dom";
-import BBsNav from "./main/BBsNav";
+// import { BrowserRouter as Router, Route } from "react-router-dom";
+// import BBsNav from "./main/BBsNav";
 
 function App() {
     const background = {
@@ -10,7 +10,7 @@ function App() {
         backgroundRepeat: "no-repeat",
         backgroundAttachment: "scroll",
         backgroundSize: "100wh 50vh",
-    }
+    };
 
     return (
         <div className="App">
@@ -18,12 +18,7 @@ function App() {
                 <h3>REACT BBS 2020</h3>
                 <p>리액트로 구현하는 BBS 프로젝트</p>
             </header>
-            <Router>
-                <BBsNav/>
-                <Route exact path="/" component={BBsMain}/>
-                <Route path="/admin" component={BBsMain}/>
-                <BbsMain/>
-            </Router>
+            <BbsMain />
             <footer className={"footer"}>
                 <address>CopyRight &copy; com.github.sun5066</address>
             </footer>
