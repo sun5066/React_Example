@@ -3,7 +3,7 @@ import CarInsert from "./CarInsert";
 import CarList from "./CarList";
 
 class CarMain extends Component {
-    id = 2;
+    id = 0;
     state = {
         carList: [],
         carData: {
@@ -62,11 +62,31 @@ class CarMain extends Component {
         this.setState({carData: {...item, isUpdate: true}})
     }
 
+    carUpdate = item => {
+        const updateCarList = this.state.carList.map(car => {
+            if (item.id === car.id) {
+                const newItem = [
+                    ...this.state.carList,
+                    {
+                        id: item.id,
+                        start_date: item.start_date,
+                        end_date: item.end_date,
+                        present_distance: item.present_distance,
+                        cost: item.cost,
+                        place: item.place,
+                    }
+                ]
+            }
+        })
+        // this.setState({carList: updateCarList});
+    }
+
     render() {
         return (
             <div>
                 <div>
-                    <CarInsert carInsert={this.carInsert} carData={this.state.carData}/>
+                    <CarInsert carInsert={this.carInsert} carData={this.state.carData} carUpdate={this.carUpdate}
+                               isUpdate={this.state.carData.isUpdate}/>
                 </div>
                 <div>
                     <CarList carList={this.state.carList} deleteItem={this.deleteItem} updateItem={this.updateItem}/>

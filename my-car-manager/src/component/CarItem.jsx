@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 
 class CarItem extends Component {
+    state = {
+        isEdit: false
+    }
 
     render() {
         const {item, index, deleteItem, updateItem} = this.props;
